@@ -1,0 +1,3 @@
+target/classes/config.properties
+app.log
+src/main/resources/config.properties
