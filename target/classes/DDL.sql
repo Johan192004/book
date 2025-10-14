@@ -11,11 +11,11 @@ isbn varchar(155) primary KEY,
 title varchar(255) not null,
 author varchar(255) not null,
 category enum('UNKNOWN','FICTION','NON_FICTION','SCIENCE','TECHNOLOGY','HISTORY','OTHERS') not null default 'UNKNOWN'
-quantity int check(quantity tity >= 0) not null,
-available int check(available tity >= 0) not null,
-price double check(price >= 0) not null,
+quantity int check(quantity >= 0) not null,
+available int check(available >= 0) not null,
+price Double check(price >= 0) not null,
 isActive boolean not null,
-createdAt DATE not null default now()
+createdAt DATE not null
 );
 
 create table members(

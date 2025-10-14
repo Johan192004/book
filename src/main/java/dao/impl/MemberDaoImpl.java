@@ -30,18 +30,26 @@ public class MemberDaoImpl implements MemberDao {
             int affectedRows = ps.executeUpdate();
             
             if (affectedRows == 0) {
+                connection.rollback();
                 throw new DataAccessException("Creating member failed, no rows affected", new SQLException("No rows affected"));
             }
             
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     member.setId(generatedKeys.getInt(1));
+                    connection.commit();
                     return member;
                 } else {
+                    connection.rollback();
                     throw new DataAccessException("Creating member failed, no ID obtained", new SQLException("No ID obtained"));
                 }
             }
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                throw new DataAccessException("Error rolling back transaction", rollbackEx);
+            }
             throw new DataAccessException("Error saving member", e);
         }
     }
@@ -133,8 +141,20 @@ public class MemberDaoImpl implements MemberDao {
             ps.setInt(5, member.getId());
             
             int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            
+            if (affectedRows > 0) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
+            }
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                throw new DataAccessException("Error rolling back transaction", rollbackEx);
+            }
             throw new DataAccessException("Error updating member", e);
         }
     }
@@ -147,8 +167,20 @@ public class MemberDaoImpl implements MemberDao {
             ps.setInt(1, id);
             
             int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            
+            if (affectedRows > 0) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
+            }
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                throw new DataAccessException("Error rolling back transaction", rollbackEx);
+            }
             throw new DataAccessException("Error deleting member", e);
         }
     }

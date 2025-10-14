@@ -11,10 +11,12 @@ import domain.User;
 public class MainView {
     private final AuthController authController;
     private final MemberView memberView;
+    private final CatalogView catalogView;
 
-    public MainView(AuthController authController, MemberView memberView) {
+    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView) {
         this.authController = authController;
         this.memberView = memberView;
+        this.catalogView = catalogView;
     }
 
     public void showMenu(){
@@ -131,7 +133,7 @@ public class MainView {
                         break;
                     case "2":
                         // Call Book Management View
-                        JOptionPane.showMessageDialog(null, "Book Management - To be implemented");
+                        catalogView.displayMenu();
                         break;
                     case "3":
                         // Call User Management View
@@ -180,7 +182,7 @@ public class MainView {
                         break;
                     case "2":
                         // Call Book Management View
-                        JOptionPane.showMessageDialog(null, "Book Management - To be implemented");
+                        catalogView.displayMenu();
                         break;
                     case "3":
                         // Call Loan Management View
