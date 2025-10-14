@@ -10,7 +10,7 @@ create table books(
 isbn varchar(155) primary KEY,
 title varchar(255) not null,
 author varchar(255) not null,
-category enum() not null default 'UKNOWN',
+category enum('UNKNOWN','FICTION','NON_FICTION','SCIENCE','TECHNOLOGY','HISTORY','OTHERS') not null default 'UNKNOWN'
 quantity int check(quantity tity >= 0) not null,
 available int check(available tity >= 0) not null,
 price double check(price >= 0) not null,
@@ -23,9 +23,8 @@ id int primary key auto_increment,
 name varchar(255) not null,
 email varchar(255) not null unique,
 phone varchar(15) not null unique,
-address varchar(255) not null,
 isActive boolean not null,
-createdAt DATE not null default now()
+createdAt DATE not null default
 );
 
 create table borrow_records(
