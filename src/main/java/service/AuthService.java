@@ -23,6 +23,11 @@ public class AuthService {
                 throw new UnauthorizedException("Invalid username or password");
             }
 
+            // Validate that the user account is active
+            if (!user.isActive()) {
+                throw new UnauthorizedException("This account has been deactivated. Please contact an administrator.");
+            }
+
             return user;
         } catch (DataAccessException e) {
             throw new ServiceException("Error during login", e);
