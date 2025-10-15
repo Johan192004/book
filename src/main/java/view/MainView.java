@@ -13,12 +13,14 @@ public class MainView {
     private final MemberView memberView;
     private final CatalogView catalogView;
     private final UserView userView;
+    private final LoanView loanView;
 
-    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView, UserView userView) {
+    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView, UserView userView, LoanView loanView) {
         this.authController = authController;
         this.memberView = memberView;
         this.catalogView = catalogView;
         this.userView = userView;
+        this.loanView = loanView;
     }
 
     public void showMenu(){
@@ -143,7 +145,7 @@ public class MainView {
                         break;
                     case "4":
                         // Call Loan Management View
-                        JOptionPane.showMessageDialog(null, "Loan Management - To be implemented");
+                        loanView.displayMenu();
                         break;
                     case "5":
                         // Call Reports View
@@ -188,7 +190,7 @@ public class MainView {
                         break;
                     case "3":
                         // Call Loan Management View
-                        JOptionPane.showMessageDialog(null, "Loan Management - To be implemented");
+                        loanView.displayMenu();
                         break;
                     case "4":
                         SessionContext.setCurrentUser(null);

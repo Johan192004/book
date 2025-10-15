@@ -10,6 +10,8 @@ public class PropertiesLoad {
     public static String DB_URL;
     public static String DB_USER;
     public static String DB_PASSWORD;
+    public static int DAYS_BORROW_LIMIT;
+    public static int FINE_PER_DAY;
 
     static {
         try (InputStream input = PropertiesLoad.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -21,6 +23,13 @@ public class PropertiesLoad {
             DB_URL = prop.getProperty("db.url");
             DB_USER = prop.getProperty("db.user");
             DB_PASSWORD = prop.getProperty("db.password");
+            try {
+                DAYS_BORROW_LIMIT = Integer.parseInt(prop.getProperty("daysBorrowLimit"));
+                FINE_PER_DAY = Integer.parseInt(prop.getProperty("finePerDay"));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                throw new ExceptionInInitializerError("Invalid number format in config.properties");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
             throw new ExceptionInInitializerError(ex);

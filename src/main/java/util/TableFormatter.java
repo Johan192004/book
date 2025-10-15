@@ -3,6 +3,7 @@ package util;
 import domain.Member;
 import domain.Book;
 import domain.User;
+import domain.Loan;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -258,6 +259,102 @@ public class TableFormatter {
         details.append(repeatChar('=', 50)).append("\n");
 
         return details.toString();
+    }
+
+    /**
+     * Format a list of loans as a table
+     * @param loans List of loans to format
+     * @return Formatted table string
+     */
+    public static String formatLoansTable(List<Loan> loans) {
+        if (loans == null || loans.isEmpty()) {
+            return "No loans found.";
+        }
+
+        StringBuilder table = new StringBuilder();
+        
+        // Header
+        table.append(String.format("%-6s %-20s %-30s %-12s %-12s %-12s %-10s %-10s%n", 
+            "ID", "MEMBER", "BOOK", "BORROW", "DUE", "RETURN", "STATUS", "FINE"));
+        table.append(repeatChar('-', 120)).append("\n");
+        
+        // Rows
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (Loan loan : loans) {
+            String memberInfo = loan.getMemberName() != null ? 
+                truncate(loan.getMemberName(), 20) : "ID: " + loan.getMemberId();
+            String bookInfo = loan.getBookTitle() != null ? 
+                truncate(loan.getBookTitle(), 30) : truncate(loan.getIsbn(), 30);
+            String borrowDate = loan.getBorrowDate() != null ? 
+                loan.getBorrowDate().format(dateFormatter) : "N/A";
+            String dueDate = loan.getDueDate() != null ? 
+                loan.getDueDate().format(dateFormatter) : "N/A";
+            String returnDate = loan.getReturnDate() != null ? 
+                loan.getReturnDate().format(dateFormatter) : "-";
+            
+            table.append(String.format("%-6d %-20s %-30s %-12s %-12s %-12s %-10s $%-9.2f%n",
+                loan.getId(),
+                memberInfo,
+                bookInfo,
+                borrowDate,
+                dueDate,
+                returnDate,
+                loan.getStatus().name(),
+                loan.getFineAmount()
+            ));
+        }
+        
+        table.append(repeatChar('-', 120)).append("\n");
+        table.append(String.format("Total: %d loan(s)", loans.size()));
+        
+        return table.toString();
+    }
+
+    /**
+     * Format a single loan as detailed info
+     * @param loan Loan to format
+     * @return Formatted string
+     */
+    public static String formatLoanDetails(Loan loan) {
+        if (loan == null) {
+            return "Loan not found.";
+        }
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String borrowDate = loan.getBorrowDate() != null ? 
+            loan.getBorrowDate().format(dateFormatter) : "N/A";
+        String dueDate = loan.getDueDate() != null ? 
+            loan.getDueDate().format(dateFormatter) : "N/A";
+        String returnDate = loan.getReturnDate() != null ? 
+            loan.getReturnDate().format(dateFormatter) : "Not returned yet";
+        String createdAt = loan.getCreatedAt() != null ? 
+            loan.getCreatedAt().format(dateFormatter) : "N/A";
+
+        return String.format(
+            "Loan Details\n" +
+            "================\n" +
+            "ID:           %d\n" +
+            "Member:       %s (ID: %d)\n" +
+            "Book:         %s\n" +
+            "ISBN:         %s\n" +
+            "Borrow Date:  %s\n" +
+            "Due Date:     %s\n" +
+            "Return Date:  %s\n" +
+            "Status:       %s\n" +
+            "Fine Amount:  $%.2f\n" +
+            "Created:      %s",
+            loan.getId(),
+            loan.getMemberName() != null ? loan.getMemberName() : "Unknown",
+            loan.getMemberId(),
+            loan.getBookTitle() != null ? loan.getBookTitle() : "Unknown",
+            loan.getIsbn(),
+            borrowDate,
+            dueDate,
+            returnDate,
+            loan.getStatus().name(),
+            loan.getFineAmount(),
+            createdAt
+        );
     }
 }
 
