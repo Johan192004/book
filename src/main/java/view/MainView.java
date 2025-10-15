@@ -12,11 +12,13 @@ public class MainView {
     private final AuthController authController;
     private final MemberView memberView;
     private final CatalogView catalogView;
+    private final UserView userView;
 
-    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView) {
+    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView, UserView userView) {
         this.authController = authController;
         this.memberView = memberView;
         this.catalogView = catalogView;
+        this.userView = userView;
     }
 
     public void showMenu(){
@@ -137,7 +139,7 @@ public class MainView {
                         break;
                     case "3":
                         // Call User Management View
-                        JOptionPane.showMessageDialog(null, "User Management - To be implemented");
+                        userView.displayMenu();
                         break;
                     case "4":
                         // Call Loan Management View

@@ -2,6 +2,7 @@ package util;
 
 import domain.Member;
 import domain.Book;
+import domain.User;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -188,4 +189,75 @@ public class TableFormatter {
         }
         return sb.toString();
     }
+
+    /**
+     * Format a list of users as a table
+     * @param users List of users to format
+     * @return Formatted table string
+     */
+    public static String formatUsersTable(List<User> users) {
+        if (users == null || users.isEmpty()) {
+            return "No users found.";
+        }
+
+        StringBuilder table = new StringBuilder();
+        
+        // Header
+        table.append(String.format("%-5s %-25s %-20s %-12s %-12s %-12s%n", 
+            "ID", "NAME", "USERNAME", "ROLE", "STATUS", "CREATED"));
+        table.append(repeatChar('-', 95)).append("\n");
+        
+        // Rows
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (User user : users) {
+            String status = user.isActive() ? "[ACTIVE]" : "[INACTIVE]";
+            String createdAt = user.getCreatedAt() != null ? 
+                user.getCreatedAt().format(dateFormatter) : "N/A";
+            
+            table.append(String.format("%-5d %-25s %-20s %-12s %-12s %-12s%n",
+                user.getId(),
+                truncate(user.getName(), 25),
+                truncate(user.getUserName(), 20),
+                user.getRole().name(),
+                status,
+                createdAt
+            ));
+        }
+        
+        table.append(repeatChar('-', 95)).append("\n");
+        table.append(String.format("Total: %d user(s)", users.size()));
+        
+        return table.toString();
+    }
+
+    /**
+     * Format user details
+     * @param user User to format
+     * @return Formatted details string
+     */
+    public static String formatUserDetails(User user) {
+        if (user == null) {
+            return "No user information available.";
+        }
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String status = user.isActive() ? "[ACTIVE]" : "[INACTIVE]";
+        String createdAt = user.getCreatedAt() != null ? 
+            user.getCreatedAt().format(dateFormatter) : "N/A";
+
+        StringBuilder details = new StringBuilder();
+        details.append(repeatChar('=', 50)).append("\n");
+        details.append("USER DETAILS\n");
+        details.append(repeatChar('=', 50)).append("\n");
+        details.append(String.format("ID           : %d%n", user.getId()));
+        details.append(String.format("Name         : %s%n", user.getName()));
+        details.append(String.format("Username     : %s%n", user.getUserName()));
+        details.append(String.format("Role         : %s%n", user.getRole().name()));
+        details.append(String.format("Status       : %s%n", status));
+        details.append(String.format("Created At   : %s%n", createdAt));
+        details.append(repeatChar('=', 50)).append("\n");
+
+        return details.toString();
+    }
 }
+
