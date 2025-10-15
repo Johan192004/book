@@ -7,6 +7,8 @@
 
 A comprehensive library management system built with Java Swing, featuring loan tracking, inventory management, fine calculation, and export functionality.
 
+**Repository:** https://github.com/Johan192004/book
+
 ---
 
 ## 📋 Table of Contents
