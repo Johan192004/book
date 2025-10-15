@@ -35,27 +35,27 @@ public class UserController {
             response.put("id", String.valueOf(user.getId()));
             response.put("username", user.getUserName());
             
-            Logger.info("UserController", String.format("User created successfully - Username: %s", user.getUserName()));
+            Logger.info("UserController", String.format("[201] User created successfully - Username: %s", user.getUserName()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Create user failed - Bad request: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[400] Create user failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Create user failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Create user failed - Unauthorized: %s", e.getMessage()));
             
         } catch (ConflictException e) {
             response.put("status", "409");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Create user failed - Conflict: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[409] Create user failed - Conflict: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Create user error", e);
+            Logger.logException("UserController", "[500] Create user error", e);
         }
         
         return response;
@@ -84,32 +84,32 @@ public class UserController {
             response.put("id", String.valueOf(user.getId()));
             response.put("username", user.getUserName());
             
-            Logger.info("UserController", String.format("User updated successfully - ID: %d", id));
+            Logger.info("UserController", String.format("[200] User updated successfully - ID: %d", id));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Update user failed - Bad request: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[400] Update user failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Update user failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Update user failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Update user failed - Not found: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[404] Update user failed - Not found: %s", e.getMessage()));
             
         } catch (ConflictException e) {
             response.put("status", "409");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Update user failed - Conflict: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[409] Update user failed - Conflict: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Update user error", e);
+            Logger.logException("UserController", "[500] Update user error", e);
         }
         
         return response;
@@ -128,27 +128,27 @@ public class UserController {
             if (deleted) {
                 response.put("status", "200");
                 response.put("message", "User deleted successfully");
-                Logger.info("UserController", String.format("User deleted successfully - ID: %d", id));
+                Logger.info("UserController", String.format("[200] User deleted successfully - ID: %d", id));
             } else {
                 response.put("status", "500");
                 response.put("message", "Failed to delete user");
-                Logger.warn("UserController", String.format("Delete user failed - ID: %d", id));
+                Logger.warn("UserController", String.format("[500] Delete user failed - ID: %d", id));
             }
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Delete user failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Delete user failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Delete user failed - Not found: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[404] Delete user failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Delete user error", e);
+            Logger.logException("UserController", "[500] Delete user error", e);
         }
         
         return response;
@@ -170,22 +170,22 @@ public class UserController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("UserController", String.format("Users retrieved successfully - Count: %d", users.size()));
+            Logger.info("UserController", String.format("[200] Users retrieved successfully - Count: %d", users.size()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Get all users failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Get all users failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Get all users failed - Not found: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[404] Get all users failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Get all users error", e);
+            Logger.logException("UserController", "[500] Get all users error", e);
         }
         
         return response;
@@ -207,22 +207,22 @@ public class UserController {
             response.put("status", "200");
             response.put("message", detailsMessage);
             
-            Logger.info("UserController", String.format("User found - ID: %d", id));
+            Logger.info("UserController", String.format("[200] User found - ID: %d", id));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Find user failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Find user failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Find user failed - Not found: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[404] Find user failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Find user error", e);
+            Logger.logException("UserController", "[500] Find user error", e);
         }
         
         return response;
@@ -248,27 +248,27 @@ public class UserController {
             response.put("status", "200");
             response.put("message", detailsMessage);
             
-            Logger.info("UserController", String.format("User found - Username: %s", username));
+            Logger.info("UserController", String.format("[200] User found - Username: %s", username));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Find user failed - Bad request: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[400] Find user failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Find user failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[401] Find user failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("UserController", String.format("Find user failed - Not found: %s", e.getMessage()));
+            Logger.warn("UserController", String.format("[404] Find user failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("UserController", "Find user error", e);
+            Logger.logException("UserController", "[500] Find user error", e);
         }
         
         return response;

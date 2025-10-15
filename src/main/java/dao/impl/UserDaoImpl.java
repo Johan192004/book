@@ -50,26 +50,18 @@ public class UserDaoImpl implements UserDao {
             int affectedRows = ps.executeUpdate();
             
             if (affectedRows == 0) {
-                connection.rollback();
                 throw new DataAccessException("Creating user failed, no rows affected", new SQLException("No rows affected"));
             }
             
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     user.setId(generatedKeys.getInt(1));
-                    connection.commit();
                     return user;
                 } else {
-                    connection.rollback();
                     throw new DataAccessException("Creating user failed, no ID obtained", new SQLException("No ID obtained"));
                 }
             }
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error creating user", e);
         }
     }
@@ -124,20 +116,8 @@ public class UserDaoImpl implements UserDao {
             ps.setInt(6, user.getId());
             
             int affectedRows = ps.executeUpdate();
-            
-            if (affectedRows > 0) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            return affectedRows > 0;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error updating user", e);
         }
     }
@@ -150,20 +130,8 @@ public class UserDaoImpl implements UserDao {
             ps.setInt(1, id);
             
             int affectedRows = ps.executeUpdate();
-            
-            if (affectedRows > 0) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            return affectedRows > 0;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error deleting user", e);
         }
     }

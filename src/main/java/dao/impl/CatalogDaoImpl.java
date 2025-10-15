@@ -33,18 +33,11 @@ public class CatalogDaoImpl implements CatalogDao {
             int affectedRows = ps.executeUpdate();
             
             if (affectedRows == 0) {
-                connection.rollback();
                 throw new DataAccessException("Creating book failed, no rows affected", new SQLException("No rows affected"));
             }
             
-            connection.commit();
             return book;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error saving book", e);
         }
     }
@@ -101,20 +94,8 @@ public class CatalogDaoImpl implements CatalogDao {
             ps.setString(8, book.getIsbn());
             
             int affectedRows = ps.executeUpdate();
-            
-            if (affectedRows > 0) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            return affectedRows > 0;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error updating book", e);
         }
     }
@@ -127,20 +108,8 @@ public class CatalogDaoImpl implements CatalogDao {
             ps.setString(1, isbn);
             
             int affectedRows = ps.executeUpdate();
-            
-            if (affectedRows > 0) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            return affectedRows > 0;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                throw new DataAccessException("Error rolling back transaction", rollbackEx);
-            }
             throw new DataAccessException("Error deleting book", e);
         }
     }

@@ -29,20 +29,20 @@ public class AuthController {
             response.put("status", "200");
             response.put("message", "Login successful");
             
-            Logger.info("AuthController", String.format("Login successful - UserId: %d, Role: %s", user.getId(), user.getRole()));
+            Logger.info("AuthController", String.format("[200] Login successful - UserId: %d, Role: %s", user.getId(), user.getRole()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("AuthController", String.format("Login failed - Bad request: %s", e.getMessage()));
+            Logger.warn("AuthController", String.format("[400] Login failed - Bad request: %s", e.getMessage()));
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("AuthController", String.format("Login failed - Unauthorized: %s (Username: %s)", e.getMessage(), username));
+            Logger.warn("AuthController", String.format("[401] Login failed - Unauthorized: %s (Username: %s)", e.getMessage(), username));
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", e.getMessage());
-            Logger.logException("AuthController", "Login error", e);
+            Logger.logException("AuthController", "[500] Login error", e);
         }
         return response;
     }

@@ -6,13 +6,17 @@ import domain.User;
 import errors.*;
 import util.Logger;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CatalogService {
     private final CatalogDao catalogDao;
+    private final Connection connection;
 
-    public CatalogService(CatalogDao catalogDao) {
+    public CatalogService(CatalogDao catalogDao, Connection connection) {
         this.catalogDao = catalogDao;
+        this.connection = connection;
     }
 
     /**
@@ -42,12 +46,29 @@ public class CatalogService {
             Book newBook = new Book(isbn, title, author, category, quantity, quantity, price, true);
             Book savedBook = catalogDao.save(newBook);
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("CatalogService", String.format("Book created successfully - ISBN: %s by %s", 
                 savedBook.getIsbn(), userRole.name()));
             
             return savedBook;
             
-        } catch (DataAccessException e) {
+        } catch (ConflictException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("CatalogService", "Error creating book", e);
             throw new ServiceException("Error creating book", e);
         }
@@ -93,12 +114,29 @@ public class CatalogService {
                 throw new ServiceException("Failed to update book", null);
             }
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("CatalogService", String.format("Book updated successfully - ISBN: %s by %s", 
                 isbn, userRole.name()));
             
             return book;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("CatalogService", "Error updating book", e);
             throw new ServiceException("Error updating book", e);
         }
@@ -121,13 +159,29 @@ public class CatalogService {
             boolean deleted = catalogDao.delete(isbn);
             
             if (deleted) {
+                // Commit transaction
+                connection.commit();
                 Logger.info("CatalogService", String.format("Book deleted successfully - ISBN: %s by %s", 
                     isbn, userRole.name()));
             }
             
             return deleted;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("CatalogService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("CatalogService", "Error deleting book", e);
             throw new ServiceException("Error deleting book", e);
         }

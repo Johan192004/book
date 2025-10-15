@@ -1,5 +1,7 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.MemberDao;
@@ -10,9 +12,11 @@ import util.Logger;
 
 public class MemberService {
     private final MemberDao memberDao;
+    private final Connection connection;
 
-    public MemberService(MemberDao memberDao) {
+    public MemberService(MemberDao memberDao, Connection connection) {
         this.memberDao = memberDao;
+        this.connection = connection;
     }
 
     /**
@@ -48,12 +52,29 @@ public class MemberService {
             Member newMember = new Member(name, email, phone);
             Member savedMember = memberDao.save(newMember);
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("MemberService", String.format("Member created successfully - ID: %d, Email: %s by %s", 
                 savedMember.getId(), savedMember.getEmail(), userRole.name()));
             
             return savedMember;
             
-        } catch (DataAccessException e) {
+        } catch (ConflictException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("MemberService", "Error creating member", e);
             throw new ServiceException("Error creating member", e);
         }
@@ -82,13 +103,29 @@ public class MemberService {
             boolean deleted = memberDao.delete(memberId);
             
             if (deleted) {
+                // Commit transaction
+                connection.commit();
                 Logger.info("MemberService", String.format("Member deleted successfully - ID: %d by %s", 
                     memberId, userRole.name()));
             }
             
             return deleted;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("MemberService", "Error deleting member", e);
             throw new ServiceException("Error deleting member", e);
         }
@@ -137,12 +174,29 @@ public class MemberService {
                 throw new ServiceException("Failed to update member", null);
             }
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("MemberService", String.format("Member updated successfully - ID: %d by %s", 
                 memberId, userRole.name()));
             
             return member;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | ConflictException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("MemberService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("MemberService", "Error updating member", e);
             throw new ServiceException("Error updating member", e);
         }

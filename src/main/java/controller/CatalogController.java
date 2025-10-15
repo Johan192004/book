@@ -43,27 +43,27 @@ public class CatalogController {
             response.put("isbn", book.getIsbn());
             response.put("title", book.getTitle());
             
-            Logger.info("CatalogController", String.format("Book created successfully - ISBN: %s", book.getIsbn()));
+            Logger.info("CatalogController", String.format("[201] Book created successfully - ISBN: %s", book.getIsbn()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Create book failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Create book failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Create book failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Create book failed - Unauthorized: %s", e.getMessage()));
             
         } catch (ConflictException e) {
             response.put("status", "409");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Create book failed - Conflict: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[409] Create book failed - Conflict: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Create book error", e);
+            Logger.logException("CatalogController", "[500] Create book error", e);
         }
         
         return response;
@@ -126,27 +126,27 @@ public class CatalogController {
                 response.put("title", book.getTitle());
             }
             
-            Logger.info("CatalogController", String.format("Book updated successfully - ISBN: %s", isbn));
+            Logger.info("CatalogController", String.format("[200] Book updated successfully - ISBN: %s", isbn));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Update book failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Update book failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Update book failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Update book failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Update book failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Update book failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Update book error", e);
+            Logger.logException("CatalogController", "[500] Update book error", e);
         }
         
         return response;
@@ -169,32 +169,32 @@ public class CatalogController {
             if (deleted) {
                 response.put("status", "200");
                 response.put("message", "Book deleted successfully");
-                Logger.info("CatalogController", String.format("Book deleted successfully - ISBN: %s", isbn));
+                Logger.info("CatalogController", String.format("[200] Book deleted successfully - ISBN: %s", isbn));
             } else {
                 response.put("status", "500");
                 response.put("message", "Failed to delete book");
-                Logger.warn("CatalogController", String.format("Delete book failed - ISBN: %s", isbn));
+                Logger.warn("CatalogController", String.format("[500] Delete book failed - ISBN: %s", isbn));
             }
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Delete book failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Delete book failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Delete book failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Delete book failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Delete book failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Delete book failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Delete book error", e);
+            Logger.logException("CatalogController", "[500] Delete book error", e);
         }
         
         return response;
@@ -216,22 +216,22 @@ public class CatalogController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("CatalogController", String.format("Books retrieved successfully - Count: %d", books.size()));
+            Logger.info("CatalogController", String.format("[200] Books retrieved successfully - Count: %d", books.size()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Get all books failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Get all books failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Get all books failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Get all books failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Get all books error", e);
+            Logger.logException("CatalogController", "[500] Get all books error", e);
         }
         
         return response;
@@ -257,27 +257,27 @@ public class CatalogController {
             response.put("status", "200");
             response.put("message", detailsMessage);
             
-            Logger.info("CatalogController", String.format("Book found - ISBN: %s", isbn));
+            Logger.info("CatalogController", String.format("[200] Book found - ISBN: %s", isbn));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find book failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Find book failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find book failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Find book failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find book failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Find book failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Find book error", e);
+            Logger.logException("CatalogController", "[500] Find book error", e);
         }
         
         return response;
@@ -304,27 +304,27 @@ public class CatalogController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("CatalogController", String.format("Books found by category - Count: %d", books.size()));
+            Logger.info("CatalogController", String.format("[200] Books found by category - Count: %d", books.size()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Find books by category failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Find books by category failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Find books by category failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Find books by category error", e);
+            Logger.logException("CatalogController", "[500] Find books by category error", e);
         }
         
         return response;
@@ -350,27 +350,27 @@ public class CatalogController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("CatalogController", String.format("Books found by author - Count: %d", books.size()));
+            Logger.info("CatalogController", String.format("[200] Books found by author - Count: %d", books.size()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by author failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Find books by author failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by author failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Find books by author failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by author failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Find books by author failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Find books by author error", e);
+            Logger.logException("CatalogController", "[500] Find books by author error", e);
         }
         
         return response;
@@ -401,27 +401,27 @@ public class CatalogController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("CatalogController", String.format("Books found by category and author - Count: %d", books.size()));
+            Logger.info("CatalogController", String.format("[200] Books found by category and author - Count: %d", books.size()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category and author failed - Bad request: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[400] Find books by category and author failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category and author failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[401] Find books by category and author failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("CatalogController", String.format("Find books by category and author failed - Not found: %s", e.getMessage()));
+            Logger.warn("CatalogController", String.format("[404] Find books by category and author failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("CatalogController", "Find books by category and author error", e);
+            Logger.logException("CatalogController", "[500] Find books by category and author error", e);
         }
         
         return response;

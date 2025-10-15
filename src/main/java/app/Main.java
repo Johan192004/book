@@ -29,9 +29,9 @@ public class Main {
         CatalogDao catalogDao = new CatalogDaoImpl(dbConfig.getInstance());
 
         AuthService authService = new AuthService(userDao);
-        MemberService memberService = new MemberService(memberDao);
-        CatalogService catalogService = new CatalogService(catalogDao);
-        UserService userService = new UserService(userDao);
+        MemberService memberService = new MemberService(memberDao, dbConfig.getInstance());
+        CatalogService catalogService = new CatalogService(catalogDao, dbConfig.getInstance());
+        UserService userService = new UserService(userDao, dbConfig.getInstance());
 
         MemberController memberController = new MemberController(memberService);
         AuthController authController = new AuthController(authService);

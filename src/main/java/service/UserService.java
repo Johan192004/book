@@ -5,13 +5,17 @@ import domain.User;
 import errors.*;
 import util.Logger;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
     private final UserDao userDao;
+    private final Connection connection;
 
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, Connection connection) {
         this.userDao = userDao;
+        this.connection = connection;
     }
 
     /**
@@ -33,12 +37,29 @@ public class UserService {
             User newUser = new User(name, username, password, User.Role.ASSISTANT);
             User savedUser = userDao.create(newUser);
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("UserService", String.format("User created successfully - Username: %s by %s", 
                 savedUser.getUserName(), currentUserRole.name()));
             
             return savedUser;
             
-        } catch (DataAccessException e) {
+        } catch (ConflictException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("UserService", "Error creating user", e);
             throw new ServiceException("Error creating user", e);
         }
@@ -80,12 +101,29 @@ public class UserService {
                 throw new NotFoundException("Failed to update user - user not found");
             }
             
+            // Commit transaction
+            connection.commit();
+            
             Logger.info("UserService", String.format("User updated successfully - ID: %d by %s", 
                 id, currentUserRole.name()));
             
             return user;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | ConflictException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("UserService", "Error updating user", e);
             throw new ServiceException("Error updating user", e);
         }
@@ -108,13 +146,29 @@ public class UserService {
             boolean deleted = userDao.delete(id);
             
             if (deleted) {
+                // Commit transaction
+                connection.commit();
                 Logger.info("UserService", String.format("User deleted successfully - ID: %d by %s", 
                     id, currentUserRole.name()));
             }
             
             return deleted;
             
-        } catch (DataAccessException e) {
+        } catch (NotFoundException | UnauthorizedException e) {
+            // Rollback on business logic errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
+            throw e;
+        } catch (DataAccessException | SQLException e) {
+            // Rollback on database errors
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                Logger.logException("UserService", "Error rolling back transaction", rollbackEx);
+            }
             Logger.logException("UserService", "Error deleting user", e);
             throw new ServiceException("Error deleting user", e);
         }

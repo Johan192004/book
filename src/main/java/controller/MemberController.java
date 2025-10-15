@@ -42,27 +42,27 @@ public class MemberController {
             response.put("email", member.getEmail());
             response.put("phone", member.getPhone());
             
-            Logger.info("MemberController", String.format("Member created successfully - ID: %d", member.getId()));
+            Logger.info("MemberController", String.format("[201] Member created successfully - ID: %d", member.getId()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Create member failed - Bad request: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[400] Create member failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Create member failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[401] Create member failed - Unauthorized: %s", e.getMessage()));
             
         } catch (ConflictException e) {
             response.put("status", "409");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Create member failed - Conflict: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[409] Create member failed - Conflict: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("MemberController", "Create member error", e);
+            Logger.logException("MemberController", "[500] Create member error", e);
         }
         
         return response;
@@ -84,27 +84,27 @@ public class MemberController {
             if (deleted) {
                 response.put("status", "200");
                 response.put("message", "Member deleted successfully");
-                Logger.info("MemberController", String.format("Member deleted successfully - ID: %d", memberId));
+                Logger.info("MemberController", String.format("[200] Member deleted successfully - ID: %d", memberId));
             } else {
                 response.put("status", "500");
                 response.put("message", "Failed to delete member");
-                Logger.warn("MemberController", String.format("Delete member failed - ID: %d", memberId));
+                Logger.warn("MemberController", String.format("[500] Delete member failed - ID: %d", memberId));
             }
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Delete member failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[401] Delete member failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Delete member failed - Not found: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[404] Delete member failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("MemberController", "Delete member error", e);
+            Logger.logException("MemberController", "[500] Delete member error", e);
         }
         
         return response;
@@ -141,32 +141,32 @@ public class MemberController {
             response.put("email", member.getEmail());
             response.put("phone", member.getPhone());
             
-            Logger.info("MemberController", String.format("Member updated successfully - ID: %d", member.getId()));
+            Logger.info("MemberController", String.format("[200] Member updated successfully - ID: %d", member.getId()));
             
         } catch (BadRequestException e) {
             response.put("status", "400");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Update member failed - Bad request: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[400] Update member failed - Bad request: %s", e.getMessage()));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Update member failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[401] Update member failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Update member failed - Not found: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[404] Update member failed - Not found: %s", e.getMessage()));
             
         } catch (ConflictException e) {
             response.put("status", "409");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Update member failed - Conflict: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[409] Update member failed - Conflict: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("MemberController", "Update member error", e);
+            Logger.logException("MemberController", "[500] Update member error", e);
         }
         
         return response;
@@ -190,22 +190,22 @@ public class MemberController {
             response.put("status", "200");
             response.put("message", tableMessage);
             
-            Logger.info("MemberController", String.format("Members retrieved successfully - Count: %d", members.size()));
+            Logger.info("MemberController", String.format("[200] Members retrieved successfully - Count: %d", members.size()));
             
         }catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Get all members failed - Not found: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[404] Get all members failed - Not found: %s", e.getMessage()));
 
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Get all members failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[401] Get all members failed - Unauthorized: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("MemberController", "Get all members error", e);
+            Logger.logException("MemberController", "[500] Get all members error", e);
         }
         
         return response;
@@ -230,22 +230,22 @@ public class MemberController {
             response.put("status", "200");
             response.put("message", detailsMessage);
             
-            Logger.info("MemberController", String.format("Member found - ID: %d", memberId));
+            Logger.info("MemberController", String.format("[200] Member found - ID: %d", memberId));
             
         } catch (UnauthorizedException e) {
             response.put("status", "401");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Find member failed - Unauthorized: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[401] Find member failed - Unauthorized: %s", e.getMessage()));
             
         } catch (NotFoundException e) {
             response.put("status", "404");
             response.put("message", e.getMessage());
-            Logger.warn("MemberController", String.format("Find member failed - Not found: %s", e.getMessage()));
+            Logger.warn("MemberController", String.format("[404] Find member failed - Not found: %s", e.getMessage()));
             
         } catch (ServiceException e) {
             response.put("status", "500");
             response.put("message", "Internal server error. Please try again later");
-            Logger.logException("MemberController", "Find member error", e);
+            Logger.logException("MemberController", "[500] Find member error", e);
         }
         
         return response;
