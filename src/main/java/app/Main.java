@@ -3,6 +3,7 @@ package app;
 import config.DatabaseConfig;
 import controller.AuthController;
 import controller.CatalogController;
+import controller.ExportController;
 import controller.LoanController;
 import controller.MemberController;
 import controller.UserController;
@@ -12,10 +13,12 @@ import dao.impl.MemberDaoImpl;
 import dao.impl.UserDaoImpl;
 import service.AuthService;
 import service.CatalogService;
+import service.ExportService;
 import service.LoanService;
 import service.MemberService;
 import service.UserService;
 import view.CatalogView;
+import view.ExportView;
 import view.LoanView;
 import view.MainView;
 import view.MemberView;
@@ -39,19 +42,22 @@ public class Main {
         CatalogService catalogService = new CatalogService(catalogDao, dbConfig.getInstance());
         UserService userService = new UserService(userDao, dbConfig.getInstance());
         LoanService loanService = new LoanService(loanDao, memberDao, catalogDao, dbConfig.getInstance());
+        ExportService exportService = new ExportService(catalogDao, loanDao, dbConfig.getInstance());
 
         MemberController memberController = new MemberController(memberService);
         AuthController authController = new AuthController(authService);
         CatalogController catalogController = new CatalogController(catalogService);
         UserController userController = new UserController(userService);
         LoanController loanController = new LoanController(loanService);
+        ExportController exportController = new ExportController(exportService);
 
         MemberView memberView = new MemberView(memberController);
         CatalogView catalogView = new CatalogView(catalogController);
         UserView userView = new UserView(userController);
         LoanView loanView = new LoanView(loanController);
+        ExportView exportView = new ExportView(exportController);
 
-        MainView mainView = new MainView(authController, memberView, catalogView, userView, loanView);
+        MainView mainView = new MainView(authController, memberView, catalogView, userView, loanView, exportView);
         mainView.showMenu();
 
         dbConfig.closeConnection();

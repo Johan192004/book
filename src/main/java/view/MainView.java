@@ -14,13 +14,15 @@ public class MainView {
     private final CatalogView catalogView;
     private final UserView userView;
     private final LoanView loanView;
+    private final ExportView exportView;
 
-    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView, UserView userView, LoanView loanView) {
+    public MainView(AuthController authController, MemberView memberView, CatalogView catalogView, UserView userView, LoanView loanView, ExportView exportView) {
         this.authController = authController;
         this.memberView = memberView;
         this.catalogView = catalogView;
         this.userView = userView;
         this.loanView = loanView;
+        this.exportView = exportView;
     }
 
     public void showMenu(){
@@ -41,8 +43,7 @@ public class MainView {
                     case "1":
                         displayLogin();
                     case "2":
-                        // Call Member Management View
-                        JOptionPane.showMessageDialog(null, "Member Management - To be implemented");
+                        exit = true;
                         break;
                     
                     default:
@@ -123,7 +124,7 @@ public class MainView {
                 2. Manage Books
                 3. Manage Users
                 4. Manage Loans
-                5. Reports
+                5. Export Data
                 6. Logout
                         """
             );
@@ -148,8 +149,8 @@ public class MainView {
                         loanView.displayMenu();
                         break;
                     case "5":
-                        // Call Reports View
-                        JOptionPane.showMessageDialog(null, "Reports - To be implemented");
+                        // Call Export View
+                        exportView.displayExportMenu();
                         break;
                     case "6":
                         SessionContext.setCurrentUser(null);
